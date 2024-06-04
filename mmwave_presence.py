@@ -211,6 +211,7 @@ class MMWave():
 
 
     def __str__(self):
+        """This is meant for debugging convenience, not really meant to be used normally."""
         s = ""
         for name in dir(self):
             if name[0]=="_":
@@ -544,6 +545,7 @@ class MMWave():
         return rc
 
     def read_config(self):
+        """Reads various configuration parameters and populates the corresponding attributes."""
         for _failure_count in range(10):
             result = self._command(COMMAND_READ_CONFIG)
             if result == None:
@@ -688,10 +690,14 @@ class MMWave():
         """Reboots the device, which resets some settings."""
         return self._command(COMMAND_RESTART)
 
+    def bluetooth(self,on=True):
+        """Turns off the bluetooth interface. Probably a good idea to turn
+        off for security in production -- but it's very handy to have available
+        in development!
+        """
 
-    # TODO (and maybe default to _off_ in config, for security)
-    def bluetooth(self,on):
-        raise NotImplemented
+        code = 0x01 if on else 0x00
+        return self._command(COMMAND_BLUETOOTH,0x00.to_bytes(2,"little"))
     
     # TODO (and I guess call this in __init__, why not)
     def mac_addr(self):    

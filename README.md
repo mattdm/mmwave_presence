@@ -31,7 +31,9 @@ Completeness?
 -------------
 
 I've implemented all of the documented commands and data-gathering for the LD2410,
-as of firmware v2.04.something. It doesn't support any other hardware, and there may
+as of firmware v2.04.something, except for those for bluetooth connections.
+
+This doesn't currently support hardware other than the LD2410, and there may
 be some undocumented features not covered.
 
 Bug: setting the last gates doesn't work. However, setting gate sensitivity to 100
@@ -41,6 +43,7 @@ There are many TODOs and a few FIXMEs in the file. Will try to eliminate them ev
 
 Debugging is mostly through (mostly commented-out) print statements. I didn't want to 
 pull in a logging dependency, but maybe there could be something better.
+
 
 Installation
 ------------
@@ -106,7 +109,7 @@ Compared to LD2410 from PiPI (https://pypi.org/project/LD2410/)
 * That module returns results in a tuple of lists, which you need to understand.
   This module returns an object with named attributes.
 
-* This module's public methods are the high-level commands like `enable_bluetooth()`.
+* This module's public methods are the high-level commands like `enable_bluetooth()`
 
 * This module does more validation of returned packets, because flaky serial
   lines are real.
