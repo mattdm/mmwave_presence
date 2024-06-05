@@ -4,16 +4,12 @@ this to be generalizable to other sensors which work in a similar way.)
 
 It's intended to be simple and straightforward, and particularly meant for use
 with CircuitPython on microcontrollers. Therefore, it expects to have a serial-port-like
-object passed in which implements read(number of bytes) and write(buffer of bytes).
+object passed in which implements read(number of bytes) and write(buffer of bytes). From there, everything should be identical.
 
-Huge Caveat!
-------------
 
-I haven't actually tested this with CircuitPython on a microcontroller yet.
-But I wanted to share without more delay.
 
-Stability?
-----------
+API Stability?
+--------------
 
 No, not yet.
 
@@ -22,9 +18,21 @@ and handling errors.
 
 Some of the methods don't really need to be public -- even though they represent
 commands, the way I've set this up, `get_firmware()` or `get_resolution()` happen
-behind the scenes.
+behind the scenes. Since they return successor or failure rather than
+actually _getting_ the result, these should probably be `_read_firmware_vers()` and `_read_resolution()`. 
 
 Still... I think this is a pretty usable start.
+
+
+Supported Hardware and Environments
+-----------------------------------
+
+I've tested this with a LD2410C device with firmware V2.04.23022511, on
+
+* Fedora Linux 40 with a ch341-uart UART-to-USB device
+* CircuitPython 9.1 beta 3 on a MatrixPortal M4.
+
+It should work with any LD2410 device on anything that supports CircuitPython, and probably MicroPython as well.
 
 
 Completeness?
@@ -50,6 +58,9 @@ Installation
 
 For Adafruit devices with CircuitPython, the best way is to compile `mmwave_presence.py` with [`mpy-cross`](https://learn.adafruit.com/welcome-to-circuitpython/frequently-asked-questions#faq-3105290), and
 then put that in the `/lib/` folder on your device.
+
+Copy `example-uart.py` to `code.py` on the device to get a quick demo.
+
 
 Basic Usage
 -----------
@@ -88,12 +99,13 @@ Random Notes
 * This module does _not_ attempt to handle serial port exceptions. Catch
   those in the main program (or other modules using this one).
 
-* The documentation is _really_ arbitrary with English-language terms, for 
+* The LD2410 documentation is _really_ arbitrary with English-language terms, for 
   example using "gate" and "door" interchangably — or "engineering mode" and
   "project mode". I've tried to pick one and be consistent even when this
   contradicts the docs in places.
 
 * Similarly: all distance units in this library are in centimeters
+
 
 Compared to LD2410 from PiPI (https://pypi.org/project/LD2410/)
 ----
