@@ -30,7 +30,7 @@ while True:
     # update values
     mmwave.read()
 
-    # printing like this is really juts for debugging
+    # printing like this is really just for debugging
     print(f"{mmwave}")
 
     time.sleep(0.1)
