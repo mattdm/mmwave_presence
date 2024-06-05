@@ -242,8 +242,8 @@ class MMWave():
 
             # determine report mode
 
-            packet_len = int.from_bytes(self.port.read(2), byteorder='little')
-            report_mode = int.from_bytes(self.port.read(1), byteorder='little')
+            packet_len = int.from_bytes(self.port.read(2), "little")
+            report_mode = int.from_bytes(self.port.read(1), "little")
 
             # various mangled-read checks
             if packet_len == PACKET_LEN_BASIC:
@@ -274,7 +274,7 @@ class MMWave():
                 #print("End-of_Frame marker doesn't match.")
                 continue
 
-            if packet[0].to_bytes() != PACKET_HEAD:
+            if packet[0].to_bytes(1,"little") != PACKET_HEAD:
                 #print(f"Packet head {packet[0]} isn't right.")
                 continue
 
@@ -302,11 +302,11 @@ class MMWave():
             # byte -2: "tail" value of 55 
             # byte -1: "calibration" value of 00
 
-            if packet[-2].to_bytes() != PACKET_TAIL:
+            if packet[-2].to_bytes(1,"little") != PACKET_TAIL:
             #print(f"Invalid packet tail value.")
                 continue
 
-            if packet[-1].to_bytes() != PACKET_CALIBRATION:
+            if packet[-1].to_bytes(1,"little") != PACKET_CALIBRATION:
                 #print(f"Invalid packet calibration value.")
                 continue
 
@@ -323,7 +323,7 @@ class MMWave():
             # todo: use lower of MAX_LEGIT_DISTANCE and distance resolution * gate limit
 
             if self.motion_detected:
-                self.motion_target_cm = int.from_bytes(packet[2:4], byteorder='little')
+                self.motion_target_cm = int.from_bytes(packet[2:4], "little")
                 self.motion_energy = int(packet[4])
                 if self.motion_target_cm > MAX_LEGIT_DISTANCE:
                     continue
@@ -331,7 +331,7 @@ class MMWave():
                     continue
 
             if self.static_detected:
-                self.static_target_cm = int.from_bytes(packet[5:7], byteorder='little')
+                self.static_target_cm = int.from_bytes(packet[5:7], "little")
                 self.static_energy = int(packet[7])
 
                 if self.static_target_cm > MAX_LEGIT_DISTANCE:
@@ -340,7 +340,7 @@ class MMWave():
                     continue
 
             if target_state:
-                self.detection_cm = int.from_bytes(packet[8:10], byteorder='little')
+                self.detection_cm = int.from_bytes(packet[8:10], "little")
                 if self.detection_cm > MAX_LEGIT_DISTANCE:
                     continue
 
@@ -422,7 +422,7 @@ class MMWave():
                 #print("Didn't find response header.")
                 continue
 
-            packet_len = int.from_bytes(self.port.read(2), byteorder='little')
+            packet_len = int.from_bytes(self.port.read(2), "little")
         
             # It would be more robust to check for the exact expected length
             # for each particular command, but gets clunky. So, at least make
@@ -512,7 +512,7 @@ class MMWave():
             buffer.append(self.port.read(1))
             if not buffer[-1]: # timeout
                 break
-            if buffer == [x.to_bytes() for x in header]:                                
+            if buffer == [x.to_bytes(1,"little") for x in header]:                                
                 return True
         self.serial_failures += 1
         return False
@@ -584,7 +584,7 @@ class MMWave():
 
 
             # then last 2 are little-endian presence timeout
-            presence_timeout = int.from_bytes(result[22:], byteorder='little')
+            presence_timeout = int.from_bytes(result[22:], "little")
             if presence_timeout > MAX_LEGIT_PRESENCE_TIMEOUT:
                 continue
             self.presence_timeout = presence_timeout
