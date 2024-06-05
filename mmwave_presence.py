@@ -61,25 +61,25 @@ LAST_GATE = 8
 COMMAND_HEADER = bytes.fromhex("fdfcfbfa")
 COMMAND_FOOTER = bytes.fromhex("04030201")
 
-COMMAND_CONFIG_ENABLE    = 0x00ff.to_bytes(2,"little")
-CONFIG_PROTOCOL_VERSION  = 0x0001.to_bytes(2,"little")
-COMMAND_CONFIG_DISABLE   = 0x00fe.to_bytes(2,"little")
+COMMAND_CONFIG_ENABLE    = (0x00ff).to_bytes(2,"little")
+CONFIG_PROTOCOL_VERSION  = (0x0001).to_bytes(2,"little")
+COMMAND_CONFIG_DISABLE   = (0x00fe).to_bytes(2,"little")
 
-COMMAND_BASIC_CONFIG     = 0x0060.to_bytes(2,"little")
-COMMAND_READ_CONFIG      = 0x0061.to_bytes(2,"little")
-COMMAND_ENG_MODE_ENABLE  = 0x0062.to_bytes(2,"little")
-COMMAND_ENG_MODE_DISABLE = 0x0063.to_bytes(2,"little")
-COMMAND_GATE_SENSITIVITY = 0x0064.to_bytes(2,"little")
-COMMAND_FIRMWARE_VERSION = 0x00A0.to_bytes(2,"little")
-COMMAND_BAUD             = 0x00A1.to_bytes(2,"little")
-COMMAND_RESET_CONFIG     = 0x00A2.to_bytes(2,"little")
-COMMAND_RESTART          = 0x00A3.to_bytes(2,"little")
-COMMAND_BLUETOOTH        = 0x00A4.to_bytes(2,"little")
-COMMAND_MAC_ADDR         = 0x00A5.to_bytes(2,"little")
-COMMAND_BLUETOOTH_PERM   = 0x00A8.to_bytes(2,"little") # not useful over serial
-COMMAND_BLUETOOTH_PASS   = 0x00A9.to_bytes(2,"little")
-COMMAND_SET_RESOLUTION   = 0x00AA.to_bytes(2,"little")
-COMMAND_GET_RESOLUTION   = 0x00AB.to_bytes(2,"little")
+COMMAND_BASIC_CONFIG     = (0x0060).to_bytes(2,"little")
+COMMAND_READ_CONFIG      = (0x0061).to_bytes(2,"little")
+COMMAND_ENG_MODE_ENABLE  = (0x0062).to_bytes(2,"little")
+COMMAND_ENG_MODE_DISABLE = (0x0063).to_bytes(2,"little")
+COMMAND_GATE_SENSITIVITY = (0x0064).to_bytes(2,"little")
+COMMAND_FIRMWARE_VERSION = (0x00A0).to_bytes(2,"little")
+COMMAND_BAUD             = (0x00A1).to_bytes(2,"little")
+COMMAND_RESET_CONFIG     = (0x00A2).to_bytes(2,"little")
+COMMAND_RESTART          = (0x00A3).to_bytes(2,"little")
+COMMAND_BLUETOOTH        = (0x00A4).to_bytes(2,"little")
+COMMAND_MAC_ADDR         = (0x00A5).to_bytes(2,"little")
+COMMAND_BLUETOOTH_PERM   = (0x00A8).to_bytes(2,"little") # not useful over serial
+COMMAND_BLUETOOTH_PASS   = (0x00A9).to_bytes(2,"little")
+COMMAND_SET_RESOLUTION   = (0x00AA).to_bytes(2,"little")
+COMMAND_GET_RESOLUTION   = (0x00AB).to_bytes(2,"little")
 
 
 
@@ -657,7 +657,7 @@ class MMWave():
         # This is all really weird. The version is actually expressed as
         # hex values in reverse -- with the first two being some kind of
         # undocumented "type"
-        if result[:2] !=  0x0001.to_bytes(2,"big"):
+        if result[:2] != (0x0001).to_bytes(2,"big"):
             raise SystemError(f"Unknown firmware type {result[:2]}.")
         major = f"V{result[3]:x}.{result[2]:02x}"
         minor = f"{result[7]:2x}{result[6]:02x}{result[5]:02x}{result[4]:02x}"
@@ -697,7 +697,7 @@ class MMWave():
         """
 
         code = 0x01 if on else 0x00
-        return self._command(COMMAND_BLUETOOTH,0x00.to_bytes(2,"little"))
+        return self._command(COMMAND_BLUETOOTH,(0x00).to_bytes(2,"little"))
     
     # TODO (and I guess call this in __init__, why not)
     def mac_addr(self):    
@@ -737,8 +737,8 @@ class MMWave():
         """Get current distance resolution -- the depth of each gate.
            With the LD2410, this is either 20 or 75.
         """
-        code = {0x00.to_bytes(2,"little"): 75,
-                0x01.to_bytes(2,"little"): 20,
+        code = {(0x00).to_bytes(2,"little"): 75,
+                (0x01).to_bytes(2,"little"): 20,
         }
 
 
